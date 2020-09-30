@@ -14,6 +14,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -54,7 +56,6 @@ class PlaylistControllerTest {
         // Assert
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         ArgumentCaptor<String> idArgumentCaptor = ArgumentCaptor.forClass(String.class);
-        //verify(playlistService).createPlaylist(any(PlaylistCreateRequest.class));
         verify(playlistService).deletePlaylist(idArgumentCaptor.capture());
         String capturedId = idArgumentCaptor.getValue();
         assertThat(capturedId).isEqualTo(id);
@@ -62,7 +63,7 @@ class PlaylistControllerTest {
 
 
     @Test
-    public void it_should_get_playlists_by_id() {
+    public void it_should_get_playlists_by_playlist_id() {
         // Arrange
         String id = "id";
         Playlist playlist = new Playlist();
@@ -73,6 +74,20 @@ class PlaylistControllerTest {
         // Assert
         assertThat(playlistResponseEntity.getBody()).isEqualTo(playlist);
         assertThat(playlistResponseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+
+    }
+
+    @Test
+    public void it_should_get_playlists_by_user_id() {
+        // Arrange
+        String id = "id";
+        Playlist playlist = new Playlist();
+
+        // Act
+        ResponseEntity<List<Playlist>> listResponseEntity = playlistController.showPlaylistByUserId(id);
+
+        // Assert
+        assertThat(listResponseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
 
     }
 
